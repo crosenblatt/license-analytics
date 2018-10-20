@@ -7,6 +7,7 @@ import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import { Stitch, AnonymousCredential } from 'mongodb-stitch-browser-sdk';
 import Plot from 'react-plotly.js';
+import { string } from 'postcss-selector-parser';
 
 class App extends Component {
   constructor(props) {
@@ -204,7 +205,7 @@ class App extends Component {
       console.log(freqs);
 
       function addElement(value, key, map) {
-        zips.push(key);
+        zips.push(key.toString());
         freqs.push(value);
       }
 
@@ -226,18 +227,24 @@ class App extends Component {
            spacing={4}
            direction="row"
            alignItems="center"
-           justify="space-evenly">
+           justify="center">
            <Grid item xs>
              <Plot
                data = {[{values: [male, female], labels: ['Males', 'Females'], type: 'pie'}]}
-               layout = { {width:500, height:400, title: 'Gender Breakdown' } }
+               layout = { {width:400, height:400, title: 'Gender Breakdown' } }
              />
            </Grid>
            <Grid item xs>
              <Plot
                data = {[{x: maleBirthdays, name: 'Males', type: 'histogram'}, {x: femaleBirthdays, name: 'Females', type: 'histogram'}]}
-               layout = { { width: 500, height: 400, barmode: 'stack', title: 'Histogram of Birth Years' } }
+               layout = { { width: 400, height: 400, barmode: 'stack', title: 'Histogram of Birth Years' } }
              />
+           </Grid>
+           <Grid item xs>
+            <Plot 
+              data = {[{x: zips, y: freqs, type: 'bar'}]}
+              layout = { { width: 400, height: 400, title: 'Postal Code Frequencies', xaxis: { type: "category" } } }
+            />
            </Grid>
          </Grid>
          <Grid item xs={24}>
