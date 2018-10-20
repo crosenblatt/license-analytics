@@ -58,7 +58,7 @@ class App extends Component {
       "eye_color": res[22]
     }
 
-    this.client.callFunction("addNewLicense", split_data).then(res => console.log(res)).catch(e => console.log(e))
+    this.client.callFunction("addNewLicense", [split_data]).then(res => console.log(res)).catch(e => console.log(e))
 
     event.preventDefault();
   }
