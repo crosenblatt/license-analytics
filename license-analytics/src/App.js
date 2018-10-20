@@ -90,8 +90,7 @@ class App extends Component {
   }
 
   backHome() {
-    this.setState({showAnalytics: false});
-    
+    this.setState({showAnalytics: false});  
   }
 
 
@@ -101,6 +100,7 @@ class App extends Component {
       let female = 0;
       let maleBirthdays = [];
       let femaleBirthdays = [];
+
       this.state.data.forEach(element => {
         if(element.gender === '1') {
           maleBirthdays.push(parseInt(element.dob_year));
@@ -111,11 +111,18 @@ class App extends Component {
         }
       });
 
-
-
       return (
         <div className = "App">
-        <Button onClick = {this.backHome}>Go Back</Button>
+        <Button style= {{background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+                boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+                borderRadius: 3,
+               border: 0,
+               color: 'white',
+               height: 48,
+               padding: '0 30px',}}
+               onClick = {this.backHome}>
+               Go Back
+          </Button>
         <Plot
           data = {[{
             values: [male, female],
@@ -128,10 +135,12 @@ class App extends Component {
         <Plot
           data = {[{
             x: maleBirthdays,
+            name: 'Males',
             type: 'histogram'
           },
           {
             x: femaleBirthdays,
+            name: 'Females',
             type: 'histogram'
           } 
           ]}
