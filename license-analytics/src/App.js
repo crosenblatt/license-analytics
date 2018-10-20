@@ -1,25 +1,33 @@
 import React, { Component } from 'react';
 import './App.css';
+import { Stitch } from 'mongodb-stitch-browser-sdk';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography'
+import TextField from '@material-ui/core/TextField'
+import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
 import { Stitch, AnonymousCredential } from 'mongodb-stitch-browser-sdk';
 import Plot from 'react-plotly.js';
 
 class App extends Component {
   constructor(props) {
     super(props)
-
+    this.licenseInput = React.createRef();
     this.state = {
       field_data: ""
     }
 
+    this.handleBlur = this.handleBlur.bind(this);
     this.client = Stitch.initializeDefaultAppClient('license-analytics-jpmyw');
     Stitch.defaultAppClient.auth.loginWithCredential(new AnonymousCredential()).then(user => {
       console.log(`Logged in as anonymous user with id: ${user.id}`);
       this.client.callFunction("getLicenseData").then(res => console.log(res)).catch(e => console.log(e))
     }).catch(console.error);
-
+    
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
+
 
   handleSubmit(event) {
     event.preventDefault()
@@ -59,37 +67,75 @@ class App extends Component {
     }
 
     this.client.callFunction("addNewLicense", [split_data]).then(res => console.log(res)).catch(e => console.log(e))
-
-    event.preventDefault();
   }
 
   handleChange(event) {
     this.setState({ field_data: event.target.value })
   }
 
+  handleBlur(event) {
+  	this.licenseInput.current.focus();
+  }
+
+
   render() {
     return (
       <div className="App">
-        <form onSubmit={this.handleSubmit}>
-          <label>
-            Swipe License:
-            <input type="text" name="data" value={this.state.field_data} onChange={this.handleChange} />
-          </label>
-        </form>
-        <p id="dataField">{this.data}</p>
-        <Plot
-          data={[
-            {
-              x: [1, 2, 3],
-              y: [2, 6, 3],
-              type: 'scatter',
-              mode: 'lines+points',
-              marker: { color: 'red' },
-            },
-            { type: 'bar', x: [1, 2, 3], y: [2, 5, 3] },
-          ]}
-          layout={{ width: 320, height: 240, title: 'A Fancy Plot' }}
-        />
+      <Grid
+       container
+       spacing={16}
+       direction="column"
+       alignItems="center"
+       justify="center"
+       onClick={this.handleBlur}
+       style={{minHeight:'101vh',
+               background: 'linear-gradient(45deg, #2196f3 30%, #21cbf3 90%)', 
+               boxShadow: '0 3px 5px 2px rgba(33, 203, 243, .30)',}}>
+       <Grid item xs={9}>
+      	 <Paper 
+       	  elevation={9}>
+      	    <Typography 
+       	     component="h1" 
+       	     variant="h1"
+       		 align="center"
+       	     gutterBottom>
+       	     Please Swipe License
+      	     </Typography>
+         </Paper>
+       </Grid>
+       <Grid item xs={7}>
+         <form 
+          onSubmit={this.handleSubmit}>
+         	<TextField
+          	 id="licenseData"
+          	 label="License Data"
+          	 InputProps={{
+          	 	color: "#ffffff"
+          	 }}
+          	 variant="outlined"
+          	 inputRef={this.licenseInput}
+             type={this.state.showPassword ? 'text': 'password'}
+             name = "data"
+             autoFocus
+          	 value={this.state.field_data}
+          	 onChange={this.handleChange}
+         	/>
+          </form>
+        </Grid>
+        <Grid item xs={3}>
+          <Button
+           style={{background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+   				   boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+   				   borderRadius: 3,
+    			   border: 0,
+    			   color: 'white',
+    			   height: 48,
+    			   padding: '0 30px',}}
+    		variant = "containted">
+    		View Analytics
+          </Button>
+        </Grid>
+      </Grid>
       </div>
     );
   }

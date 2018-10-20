@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^3.2.2",
     "mongodb-stitch-browser-sdk": "^4.0.15-0",
     "plotly.js": "^1.41.3",
     "react": "^16.5.2",
