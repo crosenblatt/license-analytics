@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import './App.css';
 import { Stitch } from 'mongodb-stitch-browser-sdk';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography'
+import Paper from '@material-ui/core/Paper';
 
 const client = Stitch.initializeDefaultAppClient('license-analytics-jpmyw');
 
@@ -17,6 +20,8 @@ class App extends Component {
   }
 
   handleSubmit(event) {
+    event.preventDefault();
+
     this.data = this.state.field_data;
     this.setState({field_data: ""})
     let res = this.data.match(/%(\w{2})([^\^]*)\^([^\$]*)\$([^\$]*)\$([^\$]*)\$\^([^\^]*)\^\?\;(\d{6})(\d*)\=(\d{2})(\d{2})(\d{4})(\d{2})(\d{2})\?\+10(\d{9})  (\w) (\w)             (\d)(\d)(\d{2})(\d{3})(\w{3})(\w{3})/)
@@ -45,17 +50,37 @@ class App extends Component {
       "hair_color": res[21],
       "eye_color": res[22]
     }
-
-    event.preventDefault();
   }
 
   handleChange(event) {
     this.setState({field_data: event.target.value})
   }
 
+
+
   render() {
     return (
       <div className="App">
+      <Grid
+       container
+       spacing={0}
+       direction="column"
+       alignItems="center"
+       justify="center"
+       style={{minHeight:'100vh',background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)'}}>
+       <Grid item xs={3}>
+      	 <Paper 
+       	  elevation={6}>
+      	    <Typography 
+       	     component="h1" 
+       	     variant="h1"
+       		 align="center"
+       	     gutterBottom>
+       	     Please Swipe License
+      	     </Typography>
+         </Paper>
+       </Grid>
+      </Grid>
         <form onSubmit={this.handleSubmit}>
           <label>
             Swipe License:
