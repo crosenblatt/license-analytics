@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
 import './App.css';
-import { Stitch } from 'mongodb-stitch-browser-sdk';
+import { Stitch, AnonymousCredential, RemoteMongoClient } from 'mongodb-stitch-browser-sdk';
 
 const client = Stitch.initializeDefaultAppClient('license-analytics-jpmyw');
+Stitch.defaultAppClient.auth.loginWithCredential(new AnonymousCredential()).then(user => {
+  console.log(`Logged in as anonymous user with id: ${user.id}`);
+}).catch(console.error);
+const mdb = client.getServiceClient(RemoteMongoClient.factory, 'mongodb-atlas');
 
 class App extends Component {
   constructor(props) {
@@ -17,6 +21,7 @@ class App extends Component {
   }
 
   handleSubmit(event) {
+    event.preventDefault()
     this.data = this.state.field_data;
     this.setState({field_data: ""})
     let res = this.data.match(/%(\w{2})([^\^]*)\^([^\$]*)\$([^\$]*)\$([^\$]*)\$\^([^\^]*)\^\?\;(\d{6})(\d*)\=(\d{2})(\d{2})(\d{4})(\d{2})(\d{2})\?\+10(\d{9})  (\w) (\w)             (\d)(\d)(\d{2})(\d{3})(\w{3})(\w{3})/)
@@ -46,6 +51,9 @@ class App extends Component {
       "eye_color": res[22]
     }
 
+    //client.callFunction("addNewLicense", split_data).then(res => console.log(res)).catch(e => console.log(e))
+    const collection = mdb.db('license-data').collection('main');
+    collection.insertOne(split_data).then(res => console.log(res)).catch(e => console.log(e));
     event.preventDefault();
   }
 
