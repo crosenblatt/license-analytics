@@ -1,20 +1,21 @@
 import React, { Component } from 'react';
 import './App.css';
 import { Stitch, AnonymousCredential } from 'mongodb-stitch-browser-sdk';
-
-const client = Stitch.initializeDefaultAppClient('license-analytics-jpmyw');
-Stitch.defaultAppClient.auth.loginWithCredential(new AnonymousCredential()).then(user => {
-  console.log(`Logged in as anonymous user with id: ${user.id}`);
-  client.callFunction("getLicenseData").then(res => console.log(res)).catch(e => console.log(e))
-}).catch(console.error);
+import Plot from 'react-plotly.js';
 
 class App extends Component {
   constructor(props) {
     super(props)
-  
+
     this.state = {
       field_data: ""
     }
+
+    this.client = Stitch.initializeDefaultAppClient('license-analytics-jpmyw');
+    Stitch.defaultAppClient.auth.loginWithCredential(new AnonymousCredential()).then(user => {
+      console.log(`Logged in as anonymous user with id: ${user.id}`);
+      this.client.callFunction("getLicenseData").then(res => console.log(res)).catch(e => console.log(e))
+    }).catch(console.error);
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -23,15 +24,15 @@ class App extends Component {
   handleSubmit(event) {
     event.preventDefault()
     this.data = this.state.field_data;
-    this.setState({field_data: ""})
+    this.setState({ field_data: "" })
 
     let res = this.data.match(/%(\w{2})([^^]*)\^([^$]*)\$([^$]*)\$([^$]*)\$\^([^^]*)\^\?;(\d{6})(\d*)=(\d{2})(\d{2})(\d{4})(\d{2})(\d{2})\?\+10(\d{9}) {2}(\w) (\w) {13}(\d)(\d)(\d{2})(\d{3})(\w{3})(\w{3})/)
 
-    if(res === null) {
+    if (res === null) {
       console.log("big oof");
       return;
     }
-    
+
     let split_data = {
       "state": res[1],
       "city": res[2],
@@ -56,14 +57,14 @@ class App extends Component {
       "hair_color": res[21],
       "eye_color": res[22]
     }
-    
-    client.callFunction("addNewLicense", split_data).then(res => console.log(res)).catch(e => console.log(e))
-    
+
+    this.client.callFunction("addNewLicense", split_data).then(res => console.log(res)).catch(e => console.log(e))
+
     event.preventDefault();
   }
 
   handleChange(event) {
-    this.setState({field_data: event.target.value})
+    this.setState({ field_data: event.target.value })
   }
 
   render() {
@@ -76,6 +77,19 @@ class App extends Component {
           </label>
         </form>
         <p id="dataField">{this.data}</p>
+        <Plot
+          data={[
+            {
+              x: [1, 2, 3],
+              y: [2, 6, 3],
+              type: 'scatter',
+              mode: 'lines+points',
+              marker: { color: 'red' },
+            },
+            { type: 'bar', x: [1, 2, 3], y: [2, 5, 3] },
+          ]}
+          layout={{ width: 320, height: 240, title: 'A Fancy Plot' }}
+        />
       </div>
     );
   }

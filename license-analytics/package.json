@@ -4,8 +4,10 @@
   "private": true,
   "dependencies": {
     "mongodb-stitch-browser-sdk": "^4.0.15-0",
+    "plotly.js": "^1.41.3",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
+    "react-plotly.js": "^2.2.0",
     "react-scripts": "2.0.5"
   },
   "scripts": {
