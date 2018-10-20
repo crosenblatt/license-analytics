@@ -13,7 +13,8 @@ class App extends Component {
     super(props)
     this.licenseInput = React.createRef();
     this.state = {
-      field_data: ""
+      field_data: "",
+      valid_id: "" // options are "fake", "of age", "not of age"
     }
 
     this.handleBlur = this.handleBlur.bind(this);
@@ -34,9 +35,9 @@ class App extends Component {
     this.setState({ field_data: "" })
 
     let res = this.data.match(/%(\w{2})([^^]*)\^([^$]*)\$([^$]*)\$([^$]*)\$\^([^^]*)\^\?;(\d{6})(\d*)=(\d{2})(\d{2})(\d{4})(\d{2})(\d{2})\?\+10(\d{9}) {2}(\w) (\w) {13}(\d)(\d)(\d{2})(\d{3})(\w{3})(\w{3})/)
-
     if (res === null) {
       console.log("big oof");
+      this.setState({valid_id: "fake"})
       return;
     }
 
@@ -65,6 +66,16 @@ class App extends Component {
       "eye_color": res[22],
       "swipe_time": Date.now()
     }
+
+    let today = new Date();
+    if (today.getFullYear() - parseInt(split_data.dob_month) >= 21 && 
+        today.getMonth()+1 >= parseInt(split_data.dob_month) &&
+        today.getDate() >= parseInt(split_data.dob_day)) {
+          this.setState({valid_id: "of age"})
+        }
+        else {
+          this.setState({valid_id: "not of age"})
+        }
 
     this.client.callFunction("addNewLicense", [split_data]).then(res => console.log(res)).catch(e => console.log(e))
   }
