@@ -5,18 +5,20 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography'
 import TextField from '@material-ui/core/TextField'
 import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
 
 const client = Stitch.initializeDefaultAppClient('license-analytics-jpmyw');
-
 
 class App extends Component {
   constructor(props) {
     super(props)
   
+    this.licenseInput = React.createRef();
     this.state = {
       field_data: ""
     }
 
+    this.handleBlur = this.handleBlur.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
@@ -62,26 +64,32 @@ class App extends Component {
     console.log(split_data);
   }
 
-
   handleChange(event) {
     this.setState({field_data: event.target.value})
   }
+
+  handleBlur(event) {
+  	console.log("Hello");
+  	this.licenseInput.current.focus();
+  }
+
 
   render() {
     return (
       <div className="App">
       <Grid
        container
-       spacing={0}
+       spacing={16}
        direction="column"
        alignItems="center"
        justify="center"
-       style={{minHeight:'100vh',
+       onClick={this.handleBlur}
+       style={{minHeight:'101vh',
                background: 'linear-gradient(45deg, #2196f3 30%, #21cbf3 90%)', 
                boxShadow: '0 3px 5px 2px rgba(33, 203, 243, .30)',}}>
        <Grid item xs={9}>
       	 <Paper 
-       	  elevation={5}>
+       	  elevation={9}>
       	    <Typography 
        	     component="h1" 
        	     variant="h1"
@@ -92,18 +100,36 @@ class App extends Component {
          </Paper>
        </Grid>
        <Grid item xs={7}>
-         <form onSubmit={this.handleSubmit}>
+         <form 
+          onSubmit={this.handleSubmit}>
          	<TextField
           	 id="licenseData"
           	 label="License Data"
+          	 InputProps={{
+          	 	color: "#ffffff"
+          	 }}
           	 variant="outlined"
+          	 inputRef={this.licenseInput}
              type={this.state.showPassword ? 'text': 'password'}
              name = "data"
-             autoFocus={true}
+             autoFocus
           	 value={this.state.field_data}
           	 onChange={this.handleChange}
          	/>
           </form>
+        </Grid>
+        <Grid item xs={3}>
+          <Button
+           style={{background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+   				   boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+   				   borderRadius: 3,
+    			   border: 0,
+    			   color: 'white',
+    			   height: 48,
+    			   padding: '0 30px',}}
+    		variant = "containted">
+    		View Analytics
+          </Button>
         </Grid>
       </Grid>
       </div>
