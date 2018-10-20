@@ -6,32 +6,37 @@ import Typography from '@material-ui/core/Typography'
 import TextField from '@material-ui/core/TextField'
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
-
-const client = Stitch.initializeDefaultAppClient('license-analytics-jpmyw');
+import { Stitch, AnonymousCredential } from 'mongodb-stitch-browser-sdk';
+import Plot from 'react-plotly.js';
 
 class App extends Component {
   constructor(props) {
     super(props)
-  
     this.licenseInput = React.createRef();
     this.state = {
       field_data: ""
     }
 
     this.handleBlur = this.handleBlur.bind(this);
+    this.client = Stitch.initializeDefaultAppClient('license-analytics-jpmyw');
+    Stitch.defaultAppClient.auth.loginWithCredential(new AnonymousCredential()).then(user => {
+      console.log(`Logged in as anonymous user with id: ${user.id}`);
+      this.client.callFunction("getLicenseData").then(res => console.log(res)).catch(e => console.log(e))
+    }).catch(console.error);
+    
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
 
 
   handleSubmit(event) {
-    event.preventDefault();
-
+    event.preventDefault()
     this.data = this.state.field_data;
-    this.setState({field_data: ""})
-    console.log(this.data);
+    this.setState({ field_data: "" })
+
     let res = this.data.match(/%(\w{2})([^^]*)\^([^$]*)\$([^$]*)\$([^$]*)\$\^([^^]*)\^\?;(\d{6})(\d*)=(\d{2})(\d{2})(\d{4})(\d{2})(\d{2})\?\+10(\d{9}) {2}(\w) (\w) {13}(\d)(\d)(\d{2})(\d{3})(\w{3})(\w{3})/)
-    if(res === null) {
+
+    if (res === null) {
       console.log("big oof");
       return;
     }
@@ -61,11 +66,11 @@ class App extends Component {
       "eye_color": res[22]
     }
 
-    console.log(split_data);
+    this.client.callFunction("addNewLicense", [split_data]).then(res => console.log(res)).catch(e => console.log(e))
   }
 
   handleChange(event) {
-    this.setState({field_data: event.target.value})
+    this.setState({ field_data: event.target.value })
   }
 
   handleBlur(event) {
