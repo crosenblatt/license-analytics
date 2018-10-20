@@ -178,8 +178,17 @@ class App extends Component {
       let female = 0;
       let maleBirthdays = [];
       let femaleBirthdays = [];
+      let zipCodes = new Map();
+      let zips = [];
+      let freqs = [];
 
       this.state.data.forEach(element => {
+        if(zipCodes.get(element.zip_code) === undefined) {
+          zipCodes.set(element.zip_code, 1);
+        } else {
+          zipCodes.set(element.zip_code, zipCodes.get(element.zip_code) + 1);
+        }
+
         if(element.gender === '1') {
           maleBirthdays.push(parseInt(element.dob_year));
           male++;
@@ -188,6 +197,16 @@ class App extends Component {
           female++;
         }
       });
+
+      zipCodes.forEach(addElement);
+
+      console.log(zips);
+      console.log(freqs);
+
+      function addElement(value, key, map) {
+        zips.push(key);
+        freqs.push(value);
+      }
 
       return (
         <div className = "App">
@@ -234,6 +253,7 @@ class App extends Component {
            </Button>
          </Grid>
         </Grid>
+
         </div>
       );
 
