@@ -25,6 +25,7 @@ class App extends Component {
     
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleAnalytics = this.handleAnalytics.bind(this);
   }
 
 
@@ -75,6 +76,10 @@ class App extends Component {
 
   handleBlur(event) {
   	this.licenseInput.current.focus();
+  }
+
+  handleAnalytics() {
+    console.log("big data baby")
   }
 
 
@@ -133,7 +138,8 @@ class App extends Component {
     			   color: 'white',
     			   height: 48,
     			   padding: '0 30px',}}
-    		variant = "contained">
+    		variant = "contained"
+        onClick={this.handleAnalytics}>
     		View Analytics
           </Button>
         </Grid>
