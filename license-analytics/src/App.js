@@ -24,7 +24,7 @@ class App extends Component {
     event.preventDefault()
     this.data = this.state.field_data;
     this.setState({field_data: ""})
-    let res = this.data.match(/%(\w{2})([^\^]*)\^([^\$]*)\$([^\$]*)\$([^\$]*)\$\^([^\^]*)\^\?\;(\d{6})(\d*)\=(\d{2})(\d{2})(\d{4})(\d{2})(\d{2})\?\+10(\d{9})  (\w) (\w)             (\d)(\d)(\d{2})(\d{3})(\w{3})(\w{3})/)
+    let res = this.data.match(/%(\w{2})([^^]*)\^([^$]*)\$([^$]*)\$([^$]*)\$\^([^^]*)\^\?;(\d{6})(\d*)=(\d{2})(\d{2})(\d{4})(\d{2})(\d{2})\?\+10(\d{9}) {2}(\w) (\w) {13}(\d)(\d)(\d{2})(\d{3})(\w{3})(\w{3})/)
     
     let split_data = {
       "state": res[1],
@@ -50,7 +50,7 @@ class App extends Component {
       "hair_color": res[21],
       "eye_color": res[22]
     }
-
+    console.log(split_data);
     //client.callFunction("addNewLicense", split_data).then(res => console.log(res)).catch(e => console.log(e))
     const collection = mdb.db('license-data').collection('main');
     collection.insertOne(split_data).then(res => console.log(res)).catch(e => console.log(e));
