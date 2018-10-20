@@ -121,8 +121,8 @@ class App extends Component {
             backgroundColor: '#00FF00'
           }}>
           <Typography
-            component="h1"
-            variant="h1"
+            component="h2"
+            variant="h2"
             align="center"
             gutterBottom>
             OVER 21
@@ -136,8 +136,8 @@ class App extends Component {
             backgroundColor: '#FF0000'
           }}>
           <Typography
-            component="h1"
-            variant="h1"
+            component="h2"
+            variant="h2"
             align="center"
             gutterBottom>
             NOT OVER 21
@@ -151,8 +151,8 @@ class App extends Component {
             backgroundColor: '#000000'
           }}>
           <Typography
-            component="h1"
-            variant="h1"
+            component="h2"
+            variant="h2"
             align="center"
             color="error"
             gutterBottom>
@@ -164,8 +164,8 @@ class App extends Component {
         banner = (<Paper
           elevation={9}>
           <Typography
-            component="h1"
-            variant="h1"
+            component="h2"
+            variant="h2"
             align="center"
             gutterBottom>
             Please Swipe License
@@ -222,6 +222,12 @@ class App extends Component {
                  margin: 'auto',
                  background: 'linear-gradient(45deg, #2196f3 30%, #21cbf3 90%)', 
                  boxShadow: '0 3px 5px 2px rgba(33, 203, 243, .30)',}}>
+         <Typography
+            component="h1"
+            variant="h1"
+            gutterBottom>
+            License Analytics
+         </Typography>
          <Grid
            container
            spacing={4}
@@ -279,6 +285,12 @@ class App extends Component {
                  margin: 'auto',
                  background: 'linear-gradient(45deg, #2196f3 30%, #21cbf3 90%)', 
                  boxShadow: '0 3px 5px 2px rgba(33, 203, 243, .30)',}}>
+         <Typography
+            component="h1"
+            variant="h1"
+            gutterBottom>
+            License Analytics
+         </Typography>
          <Grid item xs={9}>
           {banner}
          </Grid>
