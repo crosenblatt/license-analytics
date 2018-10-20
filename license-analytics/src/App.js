@@ -23,7 +23,6 @@ class App extends Component {
     this.client = Stitch.initializeDefaultAppClient('license-analytics-jpmyw');
     Stitch.defaultAppClient.auth.loginWithCredential(new AnonymousCredential()).then(user => {
       console.log(`Logged in as anonymous user with id: ${user.id}`);
-      this.client.callFunction("getLicenseData").then(res => console.log(res)).catch(e => console.log(e))
     }).catch(console.error);
 
     this.handleSubmit = this.handleSubmit.bind(this);
