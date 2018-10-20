@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import './App.css';
-import { Stitch, AnonymousCredential, RemoteMongoClient } from 'mongodb-stitch-browser-sdk';
+import { Stitch, AnonymousCredential } from 'mongodb-stitch-browser-sdk';
 
 const client = Stitch.initializeDefaultAppClient('license-analytics-jpmyw');
 Stitch.defaultAppClient.auth.loginWithCredential(new AnonymousCredential()).then(user => {
   console.log(`Logged in as anonymous user with id: ${user.id}`);
+  client.callFunction("getLicenseData").then(res => console.log(res)).catch(e => console.log(e))
 }).catch(console.error);
-const mdb = client.getServiceClient(RemoteMongoClient.factory, 'mongodb-atlas');
 
 class App extends Component {
   constructor(props) {
@@ -56,10 +56,9 @@ class App extends Component {
       "hair_color": res[21],
       "eye_color": res[22]
     }
-    console.log(split_data);
-    //client.callFunction("addNewLicense", split_data).then(res => console.log(res)).catch(e => console.log(e))
-    const collection = mdb.db('license-data').collection('main');
-    collection.insertOne(split_data).then(res => console.log(res)).catch(e => console.log(e));
+    
+    client.callFunction("addNewLicense", split_data).then(res => console.log(res)).catch(e => console.log(e))
+    
     event.preventDefault();
   }
 
