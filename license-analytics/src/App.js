@@ -23,7 +23,7 @@ class App extends Component {
       console.log(`Logged in as anonymous user with id: ${user.id}`);
       this.client.callFunction("getLicenseData").then(res => console.log(res)).catch(e => console.log(e))
     }).catch(console.error);
-    
+
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
@@ -37,7 +37,10 @@ class App extends Component {
     let res = this.data.match(/%(\w{2})([^^]*)\^([^$]*)\$([^$]*)\$([^$]*)\$\^([^^]*)\^\?;(\d{6})(\d*)=(\d{2})(\d{2})(\d{4})(\d{2})(\d{2})\?\+10(\d{9}) {2}(\w) (\w) {13}(\d)(\d)(\d{2})(\d{3})(\w{3})(\w{3})/)
     if (res === null) {
       console.log("big oof");
-      this.setState({valid_id: "fake"})
+      this.setState({ valid_id: "fake" })
+      setTimeout(() => {
+        this.setState({valid_id: ""})
+      }, 5000);
       return;
     }
 
@@ -68,14 +71,17 @@ class App extends Component {
     }
 
     let today = new Date();
-    if (today.getFullYear() - parseInt(split_data.dob_month) >= 21 && 
-        today.getMonth()+1 >= parseInt(split_data.dob_month) &&
-        today.getDate() >= parseInt(split_data.dob_day)) {
-          this.setState({valid_id: "of age"})
-        }
-        else {
-          this.setState({valid_id: "not of age"})
-        }
+    if (today.getFullYear() - parseInt(split_data.dob_month) >= 21 &&
+      today.getMonth() + 1 >= parseInt(split_data.dob_month) &&
+      today.getDate() >= parseInt(split_data.dob_day)) {
+      this.setState({ valid_id: "of age" })
+    }
+    else {
+      this.setState({ valid_id: "not of age" })
+    }
+    setTimeout(() => {
+      this.setState({valid_id: ""})
+    }, 5000);
 
     this.client.callFunction("addNewLicense", [split_data]).then(res => console.log(res)).catch(e => console.log(e))
   }
@@ -85,70 +91,127 @@ class App extends Component {
   }
 
   handleBlur(event) {
-  	this.licenseInput.current.focus();
+    this.licenseInput.current.focus();
   }
 
 
   render() {
+    let banner = null;
+    switch (this.state.valid_id) {
+      case "of age":
+        banner = (<Paper
+          elevation={9}
+          style={{
+            backgroundColor: '#00FF00'
+          }}>
+          <Typography
+            component="h1"
+            variant="h1"
+            align="center"
+            gutterBottom>
+            OVER 21
+          </Typography>
+        </Paper>);
+        break;
+      case "not of age":
+        banner = (<Paper
+          elevation={9}
+          style={{
+            backgroundColor: '#FF0000'
+          }}>
+          <Typography
+            component="h1"
+            variant="h1"
+            align="center"
+            gutterBottom>
+            NOT OVER 21
+          </Typography>
+        </Paper>);
+        break;
+      case "fake":
+        banner = (<Paper
+          elevation={9}
+          style={{
+            backgroundColor: '#000000'
+          }}>
+          <Typography
+            component="h1"
+            variant="h1"
+            align="center"
+            color="error"
+            gutterBottom>
+            POTENTIAL FAKE ID
+          </Typography>
+        </Paper>);
+        break;
+        default:
+        banner = (<Paper
+          elevation={9}>
+          <Typography
+            component="h1"
+            variant="h1"
+            align="center"
+            gutterBottom>
+            Please Swipe License
+          </Typography>
+        </Paper>);
+        break;
+    }
+
     return (
       <div className="App">
-      <Grid
-       container
-       spacing={16}
-       direction="column"
-       alignItems="center"
-       justify="center"
-       onClick={this.handleBlur}
-       style={{minHeight:'100vh',
-               maxWidth: '100vw',
-               margin: 'auto',
-               background: 'linear-gradient(45deg, #2196f3 30%, #21cbf3 90%)', 
-               boxShadow: '0 3px 5px 2px rgba(33, 203, 243, .30)',}}>
-       <Grid item xs={9}>
-      	 <Paper 
-       	  elevation={9}>
-      	    <Typography 
-       	     component="h1" 
-       	     variant="h1"
-       		 align="center"
-       	     gutterBottom>
-       	     Please Swipe License
-      	     </Typography>
-         </Paper>
-       </Grid>
-       <Grid item xs={7}>
-         <form 
-          onSubmit={this.handleSubmit}>
-         	<TextField
-          	 id="licenseData"
-          	 label="License Data"
-          	 InputProps={{
-          	 	color: "#ffffff"
-          	 }}
-          	 variant="outlined"
-          	 inputRef={this.licenseInput}
-             type={this.state.showPassword ? 'text': 'password'}
-             name = "data"
-             autoFocus
-          	 value={this.state.field_data}
-          	 onChange={this.handleChange}
-         	/>
-          </form>
+        <Grid
+          container
+          spacing={16}
+          direction="column"
+          alignItems="center"
+          justify="center"
+          onClick={this.handleBlur}
+          style={{
+            minHeight: '100vh',
+            maxWidth: '100vw',
+            margin: 'auto',
+            background: 'linear-gradient(45deg, #2196f3 30%, #21cbf3 90%)',
+            boxShadow: '0 3px 5px 2px rgba(33, 203, 243, .30)',
+          }}>
+          <Grid item xs={9}>
+            {banner}
+          </Grid>
+          <Grid item xs={7}>
+            <form
+              onSubmit={this.handleSubmit}>
+              <TextField
+                id="licenseData"
+                label="License Data"
+                InputProps={{
+                  color: "#ffffff"
+                }}
+                variant="outlined"
+                inputRef={this.licenseInput}
+                type={this.state.showPassword ? 'text' : 'password'}
+                name="data"
+                autoFocus
+                value={this.state.field_data}
+                onChange={this.handleChange}
+              />
+            </form>
+          </Grid>
+          <Grid item xs={3}>
+            <Button
+              style={{
+                background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+                boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+                borderRadius: 3,
+                border: 0,
+                color: 'white',
+                height: 48,
+                padding: '0 30px',
+              }}
+              variant="contained">
+              View Analytics
+            </Button>
+          </Grid>
         </Grid>
-        <Grid item xs={3}>
-          <Button
-           style={{background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
-   				   boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
-   				   borderRadius: 3,
-    			   border: 0,
-    			   color: 'white',
-    			   height: 48,
-    			   padding: '0 30px',}}
-    		variant = "contained">
-    		View Analytics
-          </Button>
-        </Grid>
-      </Grid>
       </div>
     );
   }
