@@ -20,13 +20,19 @@ class App extends Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
+
   handleSubmit(event) {
     event.preventDefault();
 
     this.data = this.state.field_data;
     this.setState({field_data: ""})
-    let res = this.data.match(/%(\w{2})([^\^]*)\^([^\$]*)\$([^\$]*)\$([^\$]*)\$\^([^\^]*)\^\?\;(\d{6})(\d*)\=(\d{2})(\d{2})(\d{4})(\d{2})(\d{2})\?\+10(\d{9})  (\w) (\w)             (\d)(\d)(\d{2})(\d{3})(\w{3})(\w{3})/)
-    
+    console.log(this.data);
+    let res = this.data.match(/%(\w{2})([^^]*)\^([^$]*)\$([^$]*)\$([^$]*)\$\^([^^]*)\^\?;(\d{6})(\d*)=(\d{2})(\d{2})(\d{4})(\d{2})(\d{2})\?\+10(\d{9}) {2}(\w) (\w) {13}(\d)(\d)(\d{2})(\d{3})(\w{3})(\w{3})/)
+    if(res === null) {
+      console.log("big oof");
+      return;
+    }
+
     let split_data = {
       "state": res[1],
       "city": res[2],
@@ -51,7 +57,10 @@ class App extends Component {
       "hair_color": res[21],
       "eye_color": res[22]
     }
+
+    console.log(split_data);
   }
+
 
   handleChange(event) {
     this.setState({field_data: event.target.value})
@@ -83,7 +92,12 @@ class App extends Component {
        </Grid>
       </Grid>
         <form onSubmit={this.handleSubmit}>
-            <input type="hidden" name="data" value={this.state.field_data} onChange={this.handleChange} />
+            <input 
+             type="text" 
+             name="data"
+             autoFocus
+             value={this.state.field_data}
+             onChange={this.handleChange}/>
         </form>
         <p id="dataField">{this.data}</p>
       </div>
