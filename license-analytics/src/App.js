@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import './App.css';
-import { Stitch } from 'mongodb-stitch-browser-sdk';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography'
 import TextField from '@material-ui/core/TextField'
@@ -88,7 +87,9 @@ class App extends Component {
        alignItems="center"
        justify="center"
        onClick={this.handleBlur}
-       style={{minHeight:'101vh',
+       style={{minHeight:'100vh',
+               maxWidth: '100vw',
+               margin: 'auto',
                background: 'linear-gradient(45deg, #2196f3 30%, #21cbf3 90%)', 
                boxShadow: '0 3px 5px 2px rgba(33, 203, 243, .30)',}}>
        <Grid item xs={9}>
