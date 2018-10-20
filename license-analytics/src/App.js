@@ -7,6 +7,7 @@ import Paper from '@material-ui/core/Paper';
 
 const client = Stitch.initializeDefaultAppClient('license-analytics-jpmyw');
 
+
 class App extends Component {
   constructor(props) {
     super(props)
@@ -56,8 +57,6 @@ class App extends Component {
     this.setState({field_data: event.target.value})
   }
 
-
-
   render() {
     return (
       <div className="App">
@@ -67,10 +66,12 @@ class App extends Component {
        direction="column"
        alignItems="center"
        justify="center"
-       style={{minHeight:'100vh',background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)'}}>
-       <Grid item xs={3}>
+       style={{minHeight:'100vh',
+               background: 'linear-gradient(45deg, #2196f3 30%, #21cbf3 90%)', 
+               boxShadow: '0 3px 5px 2px rgba(33, 203, 243, .30)',}}>
+       <Grid item xs={5}>
       	 <Paper 
-       	  elevation={6}>
+       	  elevation={9}>
       	    <Typography 
        	     component="h1" 
        	     variant="h1"
@@ -82,10 +83,7 @@ class App extends Component {
        </Grid>
       </Grid>
         <form onSubmit={this.handleSubmit}>
-          <label>
-            Swipe License:
-            <input type="text" name="data" value={this.state.field_data} onChange={this.handleChange} />
-          </label>
+            <input type="hidden" name="data" value={this.state.field_data} onChange={this.handleChange} />
         </form>
         <p id="dataField">{this.data}</p>
       </div>
