@@ -24,7 +24,13 @@ class App extends Component {
     event.preventDefault()
     this.data = this.state.field_data;
     this.setState({field_data: ""})
+
     let res = this.data.match(/%(\w{2})([^^]*)\^([^$]*)\$([^$]*)\$([^$]*)\$\^([^^]*)\^\?;(\d{6})(\d*)=(\d{2})(\d{2})(\d{4})(\d{2})(\d{2})\?\+10(\d{9}) {2}(\w) (\w) {13}(\d)(\d)(\d{2})(\d{3})(\w{3})(\w{3})/)
+
+    if(res === null) {
+      console.log("big oof");
+      return;
+    }
     
     let split_data = {
       "state": res[1],
