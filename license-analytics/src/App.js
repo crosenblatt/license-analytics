@@ -3,6 +3,7 @@ import './App.css';
 import { Stitch } from 'mongodb-stitch-browser-sdk';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography'
+import TextField from '@material-ui/core/TextField'
 import Paper from '@material-ui/core/Paper';
 
 const client = Stitch.initializeDefaultAppClient('license-analytics-jpmyw');
@@ -78,9 +79,9 @@ class App extends Component {
        style={{minHeight:'100vh',
                background: 'linear-gradient(45deg, #2196f3 30%, #21cbf3 90%)', 
                boxShadow: '0 3px 5px 2px rgba(33, 203, 243, .30)',}}>
-       <Grid item xs={5}>
+       <Grid item xs={9}>
       	 <Paper 
-       	  elevation={9}>
+       	  elevation={5}>
       	    <Typography 
        	     component="h1" 
        	     variant="h1"
@@ -90,16 +91,21 @@ class App extends Component {
       	     </Typography>
          </Paper>
        </Grid>
+       <Grid item xs={7}>
+         <form onSubmit={this.handleSubmit}>
+         	<TextField
+          	 id="licenseData"
+          	 label="License Data"
+          	 variant="outlined"
+             type={this.state.showPassword ? 'text': 'password'}
+             name = "data"
+             autoFocus={true}
+          	 value={this.state.field_data}
+          	 onChange={this.handleChange}
+         	/>
+          </form>
+        </Grid>
       </Grid>
-        <form onSubmit={this.handleSubmit}>
-            <input 
-             type="text" 
-             name="data"
-             autoFocus
-             value={this.state.field_data}
-             onChange={this.handleChange}/>
-        </form>
-        <p id="dataField">{this.data}</p>
       </div>
     );
   }
