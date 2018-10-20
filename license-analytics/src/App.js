@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import './App.css';
-import { Stitch } from 'mongodb-stitch-browser-sdk';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography'
 import TextField from '@material-ui/core/TextField'
@@ -63,7 +62,8 @@ class App extends Component {
       "height_in": res[19],
       "weight": res[20],
       "hair_color": res[21],
-      "eye_color": res[22]
+      "eye_color": res[22],
+      "swipe_time": Date.now()
     }
 
     this.client.callFunction("addNewLicense", [split_data]).then(res => console.log(res)).catch(e => console.log(e))
@@ -131,7 +131,7 @@ class App extends Component {
     			   color: 'white',
     			   height: 48,
     			   padding: '0 30px',}}
-    		variant = "containted">
+    		variant = "contained">
     		View Analytics
           </Button>
         </Grid>
