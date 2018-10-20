@@ -69,7 +69,6 @@ class App extends Component {
   }
 
   handleBlur(event) {
-  	console.log("Hello");
   	this.licenseInput.current.focus();
   }
 
