@@ -11,7 +11,7 @@
 	Can differentiate between fake IDs and real ones.
 	Can also determine if an individual is of legal age for various activities.
 	Some of the license data (gender, age, and zipcode) is then taken and stored in a MongoDB Stitch database for data analysis.
-    Analysus computed from data include graphs of data distribution based on inviduals' characteristics.
+    Analysis computed from data include graphs of data distribution based on inviduals' characteristics.
     
 # Why:
 	The web app was created to help bouncers and other individuals quickly determine if a form of identification was valid.
