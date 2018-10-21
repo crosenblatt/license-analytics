@@ -190,11 +190,26 @@ class App extends Component {
           zipCodes.set(element.zip_code, zipCodes.get(element.zip_code) + 1);
         }
 
+        var today = new Date();
+        console.log(today.getDate());
+        console.log(today.getMonth());
+        var year = today.getFullYear();
+        var yearsDiff = year - element.dob_year - 1;
+        if(today.getMonth() + 1 > element.dob_month) {
+          yearsDiff++;
+        } else {
+          if(today.getMonth() + 1 == element.dob_month) {
+            if(today.getDate() >= element.dob_day) {
+              yearsDiff++;
+            }
+          }
+        }
+        
         if(element.gender === '1') {
-          maleBirthdays.push(parseInt(element.dob_year));
+          maleBirthdays.push(yearsDiff);
           male++;
         } else {
-          femaleBirthdays.push(parseInt(element.dob_year));
+          femaleBirthdays.push(yearsDiff);
           female++;
         }
       });
@@ -213,27 +228,32 @@ class App extends Component {
         <div className = "App">
         <Grid
          container
-         spacing={16}
+         spacing={8}
          direction="column"
          alignItems="center"
-         justify="space-evenly"
+         justify="center"
          style={{minHeight:'100vh',
                  maxWidth: '100vw',
                  margin: 'auto',
                  background: 'linear-gradient(45deg, #2196f3 30%, #21cbf3 90%)', 
-                 boxShadow: '0 3px 5px 2px rgba(33, 203, 243, .30)',}}>
+                 boxShadow: '0 3px 5px 2px rgba(33, 203, 243, .30)',}}> 
+        <Grid item xs={6}>
          <Typography
             component="h1"
             variant="h1"
             gutterBottom>
             License Analytics
          </Typography>
+        </Grid>
          <Grid
            container
-           spacing={4}
+           item xs
+           spacing={8}
            direction="row"
            alignItems="center"
-           justify="center">
+           justify="center"
+           style={{maxWidth: '100vw', margin: 'auto'}}>
+          
            <Grid item xs>
              <Plot
                data = {[{values: [male, female], labels: ['Males', 'Females'], type: 'pie'}]}
@@ -253,7 +273,7 @@ class App extends Component {
             />
            </Grid>
          </Grid>
-         <Grid item xs={24}>
+         <Grid item xs>
            <Button style= {{background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
              boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
              borderRadius: 3,
