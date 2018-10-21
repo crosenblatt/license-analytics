@@ -191,14 +191,25 @@ class App extends Component {
         }
 
         var today = new Date();
-        var year = today.getUTCFullYear();
+        console.log(today.getDate());
+        console.log(today.getMonth());
+        var year = today.getFullYear();
+        var yearsDiff = year - element.dob_year - 1;
+        if(today.getMonth() + 1 > element.dob_month) {
+          yearsDiff++;
+        } else {
+          if(today.getMonth() + 1 == element.dob_month) {
+            if(today.getDate() >= element.dob_day) {
+              yearsDiff++;
+            }
+          }
+        }
         
         if(element.gender === '1') {
-          var yearsDiff = year - element.dob_year
-          maleBirthdays.push(parseInt(element.dob_year));
+          maleBirthdays.push(yearsDiff);
           male++;
         } else {
-          femaleBirthdays.push(parseInt(element.dob_year));
+          femaleBirthdays.push(yearsDiff);
           female++;
         }
       });
